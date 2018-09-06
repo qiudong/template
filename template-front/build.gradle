@@ -11,12 +11,19 @@ repositories {
 
 dependencies {
     compile project(":template-core")
-    compile("org.springframework.boot:spring-boot-starter-web:2.0.3.RELEASE")
-    compile 'org.mybatis.spring.boot:mybatis-spring-boot-starter:1.3.2'
-    compile 'mysql:mysql-connector-java:8.0.11'
-    compile 'org.mybatis:mybatis:3.2.1'
-    compile 'com.alibaba:druid:1.1.10'
+}
 
-    compile 'org.projectlombok:lombok:1.16.22'
-
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            snapshotRepository(url: "http://172.16.60.188:8081/nexus/content/repositories/snapshots/"){
+                authentication(userName: 'deployment', password: 'lemon888')
+            }
+            repository(url: "http://172.16.60.188:8081/nexus/content/repositories/releases/"){
+                authentication(userName: 'deployment', password: 'lemon888')
+            }
+            pom.groupId = 'com.qiudong'
+            pom.artifactId = 'template-front'
+        }
+    }
 }

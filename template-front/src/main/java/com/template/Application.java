@@ -27,14 +27,8 @@ public class Application {
 
     static final Logger logger = LoggerFactory.getLogger(Application.class);
 
-    @Autowired
-    private TuserMapper tuserMapper;
 
 
-    @RequestMapping("/")
-    List<Tuser> home() {
-        return tuserMapper.findAll();
-    }
 
     public static void main(String[] args) throws Exception {
         try {

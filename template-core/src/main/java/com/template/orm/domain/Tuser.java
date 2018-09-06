@@ -2,6 +2,8 @@ package com.template.orm.domain;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @author: qiudong
  * @date: 2018/7/23
@@ -9,7 +11,7 @@ import lombok.Data;
  * @review: qiudong /2018/7/23
  */
 @Data
-public class Tuser {
+public class Tuser implements Serializable {
 
     private Integer uId;
 

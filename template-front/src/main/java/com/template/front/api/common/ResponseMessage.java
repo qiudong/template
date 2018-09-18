@@ -1,4 +1,4 @@
-package com.template.api.common;
+package com.template.front.api.common;
 
 import lombok.Data;
 

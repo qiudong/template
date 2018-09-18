@@ -13,17 +13,16 @@ dependencies {
     compile project(":template-core")
 }
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            snapshotRepository(url: "http://172.16.60.188:8081/nexus/content/repositories/snapshots/"){
-                authentication(userName: 'deployment', password: 'lemon888')
-            }
-            repository(url: "http://172.16.60.188:8081/nexus/content/repositories/releases/"){
-                authentication(userName: 'deployment', password: 'lemon888')
-            }
-            pom.groupId = 'com.qiudong'
-            pom.artifactId = 'template-front'
-        }
+jar {
+    from {
+        //添加依懒到打包文件
+//        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.runtime.collect { zipTree(it) }
+    }
+
+    baseName = 'template'
+    version = '0.0.1-SNAPSHOT'
+    manifest {
+        attributes 'Main-Class': "com.template.front.Application"
     }
 }

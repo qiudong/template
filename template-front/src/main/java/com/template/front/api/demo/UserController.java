@@ -1,7 +1,7 @@
-package com.template.api.demo;
+package com.template.front.api.demo;
 
-import com.template.api.AbstractController;
-import com.template.api.common.ResponseMessage;
+import com.template.front.api.AbstractController;
+import com.template.front.api.common.ResponseMessage;
 import com.template.orm.mapper.TuserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

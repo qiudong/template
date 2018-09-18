@@ -1,6 +1,4 @@
-package com.template.api.exception.exceptionEnum;
-
-import lombok.Data;
+package com.template.front.api.exception.exceptionEnum;
 
 /**
  * @author: qiudong

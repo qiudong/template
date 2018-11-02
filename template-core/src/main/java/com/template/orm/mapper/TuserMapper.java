@@ -14,4 +14,9 @@ import java.util.List;
 public interface TuserMapper {
     
     List<Tuser> findAll();
+
+
+    int getInventory();
+
+    int updateInventory(Integer inventory);
 }

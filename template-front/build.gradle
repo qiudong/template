@@ -9,20 +9,21 @@ repositories {
     mavenCentral()
 }
 
+buildscript {
+    ext {
+        springBootVersion = '1.5.7.RELEASE'
+    }
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
 dependencies {
     compile project(":template-core")
+
 }
 
-jar {
-    from {
-        //添加依懒到打包文件
-//        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-        configurations.runtime.collect { zipTree(it) }
-    }
-
-    baseName = 'template'
-    version = '0.0.1-SNAPSHOT'
-    manifest {
-        attributes 'Main-Class': "com.template.front.Application"
-    }
-}

@@ -7,9 +7,17 @@
         <result column="password" property="password" />
         <result column="email" property="email" />
         <result column="remarks" property="remarks" />
+        <result column="inventory" property="inventory" />
     </resultMap>
 
     <select id="findAll" resultMap="result">
         select * from t_user
     </select>
+    <select id="getInventory" resultType="java.lang.Integer">
+        select inventory from t_user where user_name = 'jack'
+    </select>
+
+    <update id="updateInventory" parameterType="java.lang.Integer">
+        update t_user set inventory = #{inventory} where user_name = 'jack'
+    </update>
 </mapper>

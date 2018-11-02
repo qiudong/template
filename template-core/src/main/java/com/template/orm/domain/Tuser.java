@@ -23,4 +23,5 @@ public class Tuser implements Serializable {
 
     private String remarks;
 
+    private Integer inventory;
 }

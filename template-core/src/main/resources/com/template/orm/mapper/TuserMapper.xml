@@ -18,6 +18,6 @@
     </select>
 
     <update id="updateInventory" parameterType="java.lang.Integer">
-        update t_user set inventory = #{inventory} where user_name = 'jack'
+        update t_user set inventory = #{inventory}-1 where user_name = 'jack' and  inventory = #{inventory}
     </update>
 </mapper>

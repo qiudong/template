@@ -22,5 +22,4 @@ buildscript {
 }
 dependencies {
     compile project(":template-core")
-
 }

@@ -4,6 +4,9 @@ import com.template.front.api.AbstractController;
 import com.template.front.api.common.ResponseMessage;
 import com.template.orm.mapper.TuserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,14 +25,16 @@ public class UserController extends AbstractController {
     @Autowired
     private TuserMapper tuserMapper;
 
-    @PostMapping("/login/account")
+    public UserController() {
+        System.out.println("111");
+
+    }
+
+    @GetMapping("/login/account")
     public ResponseMessage home(){
         return wrapperSupplier(() -> {
-            String date = "222112";
-            SimpleDateFormat format = new SimpleDateFormat();
-            format.parse(date);
-
-            return tuserMapper.findAll();
+            tuserMapper.findAll();
+            return "";
         });
     }
 

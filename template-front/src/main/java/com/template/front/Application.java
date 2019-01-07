@@ -23,7 +23,6 @@ public class Application {
 
 
 
-
     public static void main(String[] args) throws Exception {
         try {
             ApplicationContext applicationContext = SpringApplication.run(Application.class, args);

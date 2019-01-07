@@ -21,14 +21,12 @@ public class UserController extends AbstractController {
     private TuserMapper tuserMapper;
 
     @RequestMapping("/")
-    public ResponseMessage home(){
-        return wrapperSupplier(() -> {
-            String date = "222112";
-            SimpleDateFormat format = new SimpleDateFormat();
-            format.parse(date);
+    public String home(){
+//        return wrapperSupplier(() -> {
+//            return tuserMapper.findAll();
+//        });
+        return tuserMapper.findAll().toString();
 
-            return tuserMapper.findAll();
-        });
     }
 
 }

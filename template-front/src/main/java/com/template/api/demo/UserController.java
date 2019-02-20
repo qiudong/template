@@ -1,12 +1,16 @@
 package com.template.api.demo;
 
 import com.template.api.AbstractController;
+import com.template.api.common.HttpClient;
 import com.template.api.common.ResponseMessage;
 import com.template.orm.mapper.TuserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 
 /**
@@ -20,13 +24,30 @@ public class UserController extends AbstractController {
     @Autowired
     private TuserMapper tuserMapper;
 
-    @RequestMapping("/")
-    public String home(){
+    @GetMapping
+    public String home(HttpServletRequest request, HttpServletResponse response) {
 //        return wrapperSupplier(() -> {
 //            return tuserMapper.findAll();
 //        });
-        return tuserMapper.findAll().toString();
+        System.out.println("ssss");
+        String echostr = request.getParameter("echostr");//随机字符串
 
+//        PrintWriter pw = null;
+//        try {
+//            pw = response.getWriter();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        pw.print(echostr);
+//        pw.flush();
+//        pw.close();
+        return echostr;
+
+    }
+
+    @PostMapping
+    public void post(HttpServletRequest request, HttpServletResponse response){
+        System.out.println("post");
     }
 
 }

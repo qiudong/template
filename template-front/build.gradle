@@ -10,5 +10,9 @@ repositories {
 }
 
 dependencies {
+    compile 'org.apache.httpcomponents:httpclient:4.5.7'
+    compile 'commons-beanutils:commons-beanutils:1.9.3'
+    compile 'com.alibaba:fastjson:1.2.56'
+
     compile project(":template-core")
 }

@@ -2,6 +2,7 @@ group 'com.qiudong'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
 
 sourceCompatibility = 1.8
 
@@ -9,6 +10,17 @@ repositories {
     mavenCentral()
 }
 
+buildscript {
+    repositories {
+        maven { url 'https://repo.spring.io/libs-milestone' }
+    }
+
+    dependencies {
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.0.M2'
+    }
+
+}
 dependencies {
+    compile 'org.openanzo.dependencies:org.apache.commons.httpclient:3.1'
     compile project(":template-core")
 }

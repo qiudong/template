@@ -25,7 +25,7 @@ public class UserController extends AbstractController {
 //        return wrapperSupplier(() -> {
 //            return tuserMapper.findAll();
 //        });
-        return tuserMapper.findAll().toString();
+        return "1212121";
 
     }
 

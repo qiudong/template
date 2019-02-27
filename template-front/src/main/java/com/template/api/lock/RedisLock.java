@@ -1,6 +1,7 @@
 package com.template.api.lock;
 
-import com.template.api.common.RedisConfig;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 
 import java.io.*;
@@ -10,11 +11,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 
+@Component
 public class RedisLock implements Lock {
 
     private ThreadLocal<String> threadLocal =new ThreadLocal<>();
 
+    @Autowired
     private Jedis jedis;
+
     /***
      * 阻塞式加锁
      */
@@ -42,8 +46,8 @@ public class RedisLock implements Lock {
     @Override
     public boolean tryLock() {
         String uuid = UUID.randomUUID().toString().replace("-","");
-        RedisConfig.getJdeis().connect();
-        String result = RedisConfig.getJdeis().set("lock", uuid,"NX","PX",300);
+
+        String result =jedis.set("lock", uuid,"NX","PX",300);
         threadLocal.set(uuid);
         if("OK".equalsIgnoreCase(result)){
             return true;
@@ -59,9 +63,8 @@ public class RedisLock implements Lock {
     // 解锁
     @Override
     public void unlock() {
-
-        RedisConfig.getJdeis().connect();
-        RedisConfig.getJdeis().eval(fileRead(), Arrays.asList("lock"),Arrays.asList(threadLocal.get()));
+        String script = fileRead();
+        jedis.eval(script, Arrays.asList("lock"),Arrays.asList(threadLocal.get()));
     }
 
     @Override
@@ -97,8 +100,4 @@ public class RedisLock implements Lock {
         return str;
     }
 
-
-    public static void main(String[] args) {
-        System.out.println(UUID.randomUUID().toString());
-    }
 }

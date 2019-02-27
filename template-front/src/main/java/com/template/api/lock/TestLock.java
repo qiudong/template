@@ -1,11 +1,16 @@
 package com.template.api.lock;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import javax.annotation.Resource;
 
+@Controller
 public class TestLock {
 
     public int count = 100;
 
+    @LockAnnotation(key="lock",timeOut = 300)
     private RedisLock redisLock = new RedisLock();
 
     public void send() {
@@ -55,8 +60,10 @@ public class TestLock {
         }
     }
 
-    public static void main(String[] args) {
 
+    @RequestMapping("/redis/test")
+    public String test() {
         new TestLock().send();
+        return "";
     }
 }

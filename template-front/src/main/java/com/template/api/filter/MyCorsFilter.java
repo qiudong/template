@@ -1,6 +1,8 @@
 package com.template.api.filter;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.Filter;
 
@@ -26,7 +28,7 @@ import org.springframework.stereotype.Component;
 @Component
 @ServletComponentScan
 @WebFilter(urlPatterns = "/*",filterName = "corsFilter")
-public class CorsFilter implements Filter {
+public class MyCorsFilter implements Filter {
 
     @Override
 
@@ -41,6 +43,11 @@ public class CorsFilter implements Filter {
 
         HttpServletRequest request = (HttpServletRequest) servletRequest;
 
+        Map<String,Object> map = new HashMap();
+        for (Map.Entry<String,Object> map1:
+        map.entrySet()) {
+
+        }
 // 指定允许其他域名访问
 
         response.setHeader("Access-Control-Allow-Origin", "*");

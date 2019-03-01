@@ -4,15 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.annotation.Resource;
-
 @Controller
 public class TestLock {
 
     public int count = 100;
 
     @Autowired
-//    @LockAnnotation(key="lock",timeOut = 300)
+    @LockAnnotation(key="lock",timeOut = 300)
     private RedisLock redisLock;
 
 //    public void send() {
@@ -63,11 +61,10 @@ public class TestLock {
 //    }
 
 
-    @RequestMapping("/redis/test")
+    @RequestMapping("/redisLock/test")
     public String test() {
         while (count > 0) {
             try {
-
                 // 加锁
                 redisLock.lock();
 
@@ -80,7 +77,7 @@ public class TestLock {
                     System.out.println(Thread.currentThread().getName() + "售出第" + count-- + "张");
                 }
 
-                Thread.sleep(100);
+                Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } finally {

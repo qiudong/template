@@ -27,37 +27,32 @@ import org.springframework.stereotype.Component;
 
 @Component
 @ServletComponentScan
-@WebFilter(urlPatterns = "/*",filterName = "corsFilter")
+@WebFilter(urlPatterns = "/*", filterName = "corsFilter")
 public class MyCorsFilter implements Filter {
 
     @Override
-
     public void init(FilterConfig filterConfig) throws ServletException {
     }
 
     @Override
-
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
         HttpServletRequest request = (HttpServletRequest) servletRequest;
 
-        Map<String,Object> map = new HashMap();
-        for (Map.Entry<String,Object> map1:
-        map.entrySet()) {
+        Map<String, Object> map = new HashMap();
+        for (Map.Entry<String, Object> map1 :
+                map.entrySet()) {
 
         }
-// 指定允许其他域名访问
-
+        // 指定允许其他域名访问
         response.setHeader("Access-Control-Allow-Origin", "*");
 
-// 响应类型
-
+        // 响应类型
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, OPTIONS, DELETE");
 
-// 响应头设置
-
+        // 响应头设置
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, x-requested-with, X-Custom-Header, HaiYi-Access-Token");
 
         if ("OPTIONS".equals(request.getMethod())) {

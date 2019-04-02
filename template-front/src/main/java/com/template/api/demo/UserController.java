@@ -2,6 +2,8 @@ package com.template.api.demo;
 
 import com.template.api.AbstractController;
 import com.template.api.common.ResponseMessage;
+import com.template.api.redis.TestRedis;
+import com.template.api.redis.User;
 import com.template.orm.mapper.TuserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,15 +19,22 @@ import java.text.SimpleDateFormat;
  */
 @RestController
 public class UserController extends AbstractController {
+//    @Autowired
+//    private TuserMapper tuserMapper;
+
     @Autowired
-    private TuserMapper tuserMapper;
+    private TestRedis redis;
 
     @RequestMapping("/")
-    public String home(){
+    public User home(){
 //        return wrapperSupplier(() -> {
 //            return tuserMapper.findAll();
 //        });
-        return "1212121";
+//        redis.hsetTest();
+//        redis.hsetTest();
+        redis.setStr();
+        return redis.hgetTest();
+//        return "1212121";
 
     }
 

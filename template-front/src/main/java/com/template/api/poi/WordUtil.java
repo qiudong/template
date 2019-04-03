@@ -6,11 +6,11 @@ import org.apache.poi.xddf.usermodel.chart.*;
 import org.apache.poi.xwpf.usermodel.*;
 import org.springframework.util.StringUtils;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @Description: java类作用描述
@@ -32,7 +32,7 @@ public class WordUtil {
      * @param tableList 需要插入的表格信息集合
      * @return 成功返回true, 失败返回false
      */
-    public static boolean changWord(String inputUrl, String outputUrl, Map<String, String> textMap, List<String[]> tableList) {
+    public static boolean changWord(String inputUrl, String outputUrl, Map<String, String> textMap, ChartBean chartBean) {
 
         // 模板转换默认成功
         boolean changeFlag = true;
@@ -41,6 +41,10 @@ public class WordUtil {
             XWPFDocument document = new XWPFDocument(POIXMLDocument.openPackage(inputUrl));
             // 解析替换文本段落对象
             WordUtil.changeText(document, textMap);
+
+            // 解析替换图表对象
+            changeChart(document, chartBean);
+
 //            // 解析替换表格对象
 //            WordUtil.changeTable2(document, textMap, tableList);
 
@@ -67,7 +71,7 @@ public class WordUtil {
         List<XWPFParagraph> paragraphs = document.getParagraphs();
 
         Set<String> keySet = textMap.keySet();
-        changeParagraph(textMap, paragraphs, keySet);
+//        changeParagraph(textMap, paragraphs, keySet);
         // 获取表格对象集合
         List<XWPFTable> tables = document.getTables();
         for (XWPFTable table : tables) {
@@ -197,21 +201,67 @@ public class WordUtil {
         }
     }
 
-    public static void changeChart(XWPFDocument document){
-        List<XWPFChart> charts = document.getCharts();
-        XWPFChart chart = charts.get(0);
 
-        final List<XDDFChartData> series = chart.getChartSeries();
-        final XDDFBarChartData bar = (XDDFBarChartData) series.get(0);
-        final XDDFChartData.Series series1 = bar.getSeries().get(0);
+    public static void changeChart(XWPFDocument document, ChartBean chartBean) {
+        XWPFChart chart = document.getCharts().get(0);
+        setBarData(chart, chartBean);
+    }
+
+
+    private static void setBarData(XWPFChart chart, ChartBean chartBean) {
+        String[] categories = chartBean.getCategory().toArray(new String[chartBean.getCategory().size()]);
+
+        String[] series = chartBean.getSeries();
+        final List<List<Double>> params = chartBean.getData();
+
+        final List<Double[]> doubles = params.stream().map(list -> list.toArray(new Double[list.size()])).collect(Collectors.toList());
+
+
+        final List<XDDFChartData> data = chart.getChartSeries();
+        final XDDFLineChartData bar = (XDDFLineChartData) data.get(0);
+
         final int numOfPoints = categories.length;
-
         final String categoryDataRange = chart.formatRange(new CellRangeAddress(1, numOfPoints, 0, 0));
+        final XDDFDataSource<?> categoriesData = XDDFDataSourcesFactory.fromArray(categories, categoryDataRange, 0);
 
-        final XDDFDataSource<?> categoriesData = XDDFDataSourcesFactory.fromArray(categories, categoryDataRange,0);
-        final XDDFNumericalDataSource<? extends Number> valuesData2 = XDDFDataSourcesFactory.fromArray(values, valuesDataRange2,2);
+        int[] count = {0};
 
-        series1.replaceData(categoriesData, valuesData2);
+        doubles.stream().forEach(value -> {
+            int col = count[0];
+            final String valuesDataRange = chart.formatRange(new CellRangeAddress(1, numOfPoints, col + 1, col + 1));
+            final XDDFNumericalDataSource<? extends Number> valuesData = XDDFDataSourcesFactory.fromArray(value, valuesDataRange, col+1);
+
+            if (col == 0 || col == 1 || col == 2) { //todo 删掉默认模板系列 报下角标越界  临时处理 判断默认模板前三
+                XDDFChartData.Series seriesData = bar.getSeries().get(col);
+                seriesData.replaceData(categoriesData, valuesData);
+                seriesData.setTitle(series[col], chart.setSheetTitle(series[col], col));
+            } else {
+                XDDFChartData.Series seriesData = bar.addSeries(categoriesData, valuesData);
+                seriesData.setTitle(series[col], chart.setSheetTitle(series[col], col));
+            }
+
+            count[0]++;
+        });
+
+        chart.plot(bar);
+        chart.setTitleText(chartBean.getChartTitle());
+        chart.setTitleOverlay(false);
+    }
+
+    private static void setColumnData(XWPFChart chart, String chartTitle) {
+        // Series Text
+        List<XDDFChartData> series = chart.getChartSeries();
+        XDDFBarChartData bar = (XDDFBarChartData) series.get(0);
+
+        // in order to transform a bar chart into a column chart, you just need to change the bar direction
+        bar.setBarDirection(BarDirection.COL);
+
+        // looking for "Stacked Bar Chart"? uncomment the following line
+        // bar.setBarGrouping(BarGrouping.STACKED);
+
+        // additionally, you can adjust the axes
+        bar.getCategoryAxis().setOrientation(AxisOrientation.MAX_MIN);
+        bar.getValueAxes().get(0).setPosition(AxisPosition.TOP);
     }
 
     /**
@@ -278,6 +328,63 @@ public class WordUtil {
         map.put("LOAN_mobileNo", "023-5854555");
         map.put("GUARANTEE_guaPersonName", "李四");
 
+
+        String[] series = {"黑色", "白色", "红色", "紫色"};//modelReader.readLine().split(",");
+
+        ChartBean chartBean = new ChartBean();
+        chartBean.setChartTitle("生成图表");
+        chartBean.setSeries(series);
+        List<String> categorys = new ArrayList<>(10);
+        categorys.add("1111");
+        categorys.add("2222");
+        categorys.add("3333");
+        categorys.add("44444");
+        categorys.add("55555");
+        categorys.add("66666");
+        categorys.add("77777");
+        chartBean.setCategory(categorys);
+        List<List<Double>> data = new ArrayList<>();
+        List<Double> item = new ArrayList<>();
+        item.add(Double.valueOf(12));
+        item.add(Double.valueOf(13));
+        item.add(Double.valueOf(33));
+        item.add(Double.valueOf(15));
+        item.add(Double.valueOf(21));
+        item.add(Double.valueOf(17));
+        item.add(Double.valueOf(18));
+        data.add(item);
+        List<Double> item1 = new ArrayList<>();
+        item1.add(Double.valueOf(22));
+        item1.add(Double.valueOf(34));
+        item1.add(Double.valueOf(24));
+        item1.add(Double.valueOf(22));
+        item1.add(Double.valueOf(26));
+        item1.add(Double.valueOf(27));
+        item1.add(Double.valueOf(28));
+        data.add(item1);
+
+        List<Double> item2 = new ArrayList<>();
+        item2.add(Double.valueOf(32));
+        item2.add(Double.valueOf(12));
+        item2.add(Double.valueOf(34));
+        item2.add(Double.valueOf(35));
+        item2.add(Double.valueOf(36));
+        item2.add(Double.valueOf(23));
+        item2.add(Double.valueOf(38));
+        data.add(item2);
+
+        List<Double> item3 = new ArrayList<>();
+        item3.add(Double.valueOf(42));
+        item3.add(Double.valueOf(43));
+        item3.add(Double.valueOf(44));
+        item3.add(Double.valueOf(34));
+        item3.add(Double.valueOf(46));
+        item3.add(Double.valueOf(34));
+        item3.add(Double.valueOf(48));
+        data.add(item3);
+        chartBean.setData(data);
+
+
         /** 此Map存放动态 批量生产Word中表格的内容 **/
         List<String[]> tableDataList = new ArrayList<String[]>();
         tableDataList.add(new String[]{"应还款日", "应还本金", "应付利息", "应还（付）总额"});
@@ -292,7 +399,7 @@ public class WordUtil {
         String localTemplateTmpPath = "/Users/qiudong/myproject/template/template-front/src/main/resources/人物模板.doc";
         String newContractLocalPath = "/Users/qiudong/myproject/template/template-front/src/main/resources/1111.doc";
 
-        WordUtil.changWord(localTemplateTmpPath, newContractLocalPath, map, tableDataList);
+        WordUtil.changWord(localTemplateTmpPath, newContractLocalPath, map, chartBean);
 
     }
 }

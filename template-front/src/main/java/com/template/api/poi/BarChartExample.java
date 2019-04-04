@@ -49,7 +49,6 @@
 //            // Values
 //            List<Double> listCountries = new ArrayList<>(10);
 //            List<Double> listSpeakers = new ArrayList<>(10);
-//            List<Double> listSpeakers1 = new ArrayList<>(10);
 //
 //            // set model
 //            String ln;
@@ -58,18 +57,16 @@
 //                listCountries.add(Double.valueOf(vals[0]));
 //                listSpeakers.add(Double.valueOf(vals[1]));
 //                listLanguages.add(vals[2]);
-//                listSpeakers1.add(Double.valueOf(vals[3]));
 //            }
 //            String[] categories = listLanguages.toArray(new String[listLanguages.size()]);
 //            Double[] values1 = listCountries.toArray(new Double[listCountries.size()]);
 //            Double[] values2 = listSpeakers.toArray(new Double[listSpeakers.size()]);
-//            Double[] values3 = listSpeakers1.toArray(new Double[listSpeakers.size()]);
 //
 //            try (XWPFDocument doc = new XWPFDocument(argIS)) {
 //                XWPFChart chart = doc.getCharts().get(0);
-//                setBarData(chart, chartTitle, series, categories, values1, values2,values3);
+//                setBarData(chart, chartTitle, series, categories, values1, values2);
 //                chart = doc.getCharts().get(1);
-////                setColumnData(chart, "Column variant");
+//                setColumnData(chart, "Column variant");
 //
 //                // save the result
 //                try (OutputStream out = new FileOutputStream("/Users/qiudong/myproject/template/template-front/src/main/resources/bar-chart-demo-output.docx")) {
@@ -80,7 +77,7 @@
 //        System.out.println("Done");
 //    }
 //
-//    private static void setBarData(XWPFChart chart, String chartTitle, String[] series, String[] categories, Double[] values1, Double[] values2,Double[] values3) {
+//    private static void setBarData(XWPFChart chart, String chartTitle, String[] series, String[] categories, Double[] values1, Double[] values2) {
 //        final List<XDDFChartData> data = chart.getChartSeries();
 //        final XDDFBarChartData bar = (XDDFBarChartData) data.get(0);
 //
@@ -93,7 +90,6 @@
 //        final XDDFNumericalDataSource<? extends Number> valuesData = XDDFDataSourcesFactory.fromArray(values1, valuesDataRange, 1);
 //        values1[6] = 16.0; // if you ever want to change the underlying data
 //        final XDDFNumericalDataSource<? extends Number> valuesData2 = XDDFDataSourcesFactory.fromArray(values2, valuesDataRange2, 2);
-//        final XDDFNumericalDataSource<? extends Number> valuesData3 = XDDFDataSourcesFactory.fromArray(values3, valuesDataRange3, 3);
 //
 //        XDDFChartData.Series series1 = bar.getSeries().get(0);
 //        series1.replaceData(categoriesData, valuesData);
@@ -101,8 +97,6 @@
 //        XDDFChartData.Series series2 = bar.addSeries(categoriesData, valuesData2);
 //        series2.setTitle(series[1], chart.setSheetTitle(series[1], 1));
 //
-//        XDDFChartData.Series series3 = bar.addSeries(categoriesData, valuesData3);
-//        series3.setTitle(series[2], chart.setSheetTitle(series[2], 2));
 //        chart.plot(bar);
 //        chart.setTitleText(chartTitle); // https://stackoverflow.com/questions/30532612
 //        chart.setTitleOverlay(false);
@@ -116,7 +110,7 @@
 //        // in order to transform a bar chart into a column chart, you just need to change the bar direction
 //        bar.setBarDirection(BarDirection.COL);
 //
-//        // looking for "Stacked Bar Chart"? uncomment the following line
+//        // looking for "Stacked Bar ChartService"? uncomment the following line
 //        // bar.setBarGrouping(BarGrouping.STACKED);
 //
 //        // additionally, you can adjust the axes

@@ -7,8 +7,8 @@ apply plugin: 'war'
 sourceCompatibility = 1.8
 
 repositories {
-    mavenCentral()
-    jcenter()
+    maven { url "http://172.16.60.188:8081/nexus/content/groups/public" }
+
 }
 
 
@@ -21,4 +21,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web:2.0.3.RELEASE")
     compile 'org.mybatis.spring.boot:mybatis-spring-boot-starter:1.3.2'
 //    testCompile("org.springframework.boot:spring-boot-starter-test")
+    compile 'org.projectlombok:lombok:1.18.2'
+    compile("org.codehaus.groovy:groovy")
+
 }

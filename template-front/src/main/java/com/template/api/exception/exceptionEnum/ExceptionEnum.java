@@ -1,6 +1,5 @@
 package com.template.api.exception.exceptionEnum;
 
-import lombok.Data;
 
 /**
  * @author: qiudong

@@ -2,4 +2,5 @@ rootProject.name = 'template'
 include 'template-front'
 include 'template-core'
 include 'template-common'
+include 'template-consumer'
 

@@ -21,13 +21,14 @@ buildscript {
 
 }
 dependencies {
-//    compile 'org.openanzo.dependencies:org.apache.commons.httpclient:3.1'
+    //    compile 'org.openanzo.dependencies:org.apache.commons.httpclient:3.1'
     compile project(":template-core")
     compile 'org.yaml:snakeyaml:1.23'
-    compile 'org.apache.curator:curator-framework:2.12.0'
-    compile 'org.apache.curator:curator-recipes:2.8.0'
+
     compile 'org.apache.dubbo:dubbo:2.7.5'
     compile 'com.github.sgroschupf:zkclient:0.1'
     compile 'org.apache.zookeeper:zookeeper:3.4.9'
-//    compile 'org.apache.dubbo:dubbo-spring-boot-starter:2.7.3'
+//    compil compile e 'org.apache.dubbo:dubbo-spring-boot-starter:2.7.3'
+    compile 'org.apache.curator:curator-framework:2.12.0'
+    compile 'org.apache.curator:curator-recipes:2.8.0'
 }

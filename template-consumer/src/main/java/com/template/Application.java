@@ -1,21 +1,15 @@
 package com.template;
 
-import com.template.orm.domain.Tuser;
-import com.template.orm.mapper.TuserMapper;
-import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
+import com.template.dubbo.xml.api.TestService;
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * @author: qiudong
@@ -25,8 +19,8 @@ import java.util.List;
  */
 
 @SpringBootApplication
-@ImportResource("classpath:spring-dubbo.xml")
 @RestController
+@ImportResource("classpath:consumer.xml")
 @MapperScan("com.template.orm.mapper")//将项目中对应的mapper类的路径加进来就可以了
 public class Application {
 
@@ -40,6 +34,8 @@ public class Application {
             ApplicationContext applicationContext = SpringApplication.run(Application.class, args);
             logger.info(print());
             logger.info("StartApp is success!");
+            TestService testService = (TestService)applicationContext.getBean("testService");
+            testService.get();
         } catch (Exception e) {
             System.out.println(e);
         }
